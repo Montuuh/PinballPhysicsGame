@@ -24,63 +24,78 @@ ModulePhysics::~ModulePhysics()
 {
 }
 
-
-
-int points[24] = {
-	-38, 80,
-	-44, -54,
-	-16, -60,
-	-16, -17,
-	19, -19,
-	19, -79,
-	61, -77,
-	57, 73,
-	17, 78,
-	20, 16,
-	-25, 13,
-	-9, 72
-};
-
 bool ModulePhysics::Start()
 {
 	LOG("Creating Physics 2D environment");
 
 	world = new b2World(b2Vec2(GRAVITY_X, -GRAVITY_Y));
 
-	// CIRCLE AS GROUND
-	//int x = SCREEN_WIDTH / 2;
-	//int y = SCREEN_HEIGHT / 1.5f;
-	//int diameter = SCREEN_WIDTH / 2;
+	b2BodyDef bd;
+	ground = world->CreateBody(&bd);
 
-	//b2BodyDef body;
-	//body.type = b2_staticBody;
-	//body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+	b2BodyDef body;
+	body.type = b2_staticBody;
+	body.position.Set(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0));
 
-	//b2Body* b = world->CreateBody(&body);
+	b2Body* main_board = world->CreateBody(&body);
 
-	//b2CircleShape shape;
-	//shape.m_radius = PIXEL_TO_METERS(diameter) * 0.5f;
+	//Board create
+	int Pinball_MainBoard_1_coords[80] = {
+		119, 476,
+		72, 430,
+		72, 372,
+		87, 357,
+		80, 349,
+		80, 283,
+		72, 261,
+		72, 175,
+		87, 160,
+		87, 126,
+		72, 80,
+		72, 66,
+		78, 49,
+		88, 36,
+		99, 28,
+		106, 25,
+		196, 25,
+		208, 30,
+		219, 39,
+		227, 52,
+		231, 63,
+		232, 69,
+		232, 394,
+		228, 396,
+		228, 445,
+		223, 445,
+		223, 396,
+		219, 394,
+		219, 317,
+		209, 317,
+		209, 349,
+		201, 357,
+		215, 371,
+		215, 431,
+		169, 476,
+		235, 476,
+		235, 1,
+		69, 1,
+		69, 476,
+		119, 476
+	};
 
-	//b2FixtureDef fixture;
-	//fixture.shape = &shape;
-	//b->CreateFixture(&fixture);
+	b2ChainShape shape;
+	b2Vec2* p = new b2Vec2[78 / 2];
 
-	// BOX AS GROUND
-	int x = SCREEN_WIDTH / 2;
-	int y =SCREEN_HEIGHT / 2;
-
-	b2BodyDef bodyDef;
-	bodyDef.type = b2_staticBody;
-	bodyDef.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
-
-	b2Body* ground = world->CreateBody(&bodyDef);
-
-	b2PolygonShape square;
-	square.SetAsBox(PIXEL_TO_METERS(200), PIXEL_TO_METERS(50));
+	for (uint i = 0; i < 78 / 2; ++i)
+	{
+		p[i].x = PIXEL_TO_METERS(Pinball_MainBoard_1_coords[i * 2 + 0]);
+		p[i].y = PIXEL_TO_METERS(Pinball_MainBoard_1_coords[i * 2 + 1]);
+	}
+	shape.CreateLoop(p, 78 / 2);
 
 	b2FixtureDef fixture;
-	fixture.shape = &square;
-	ground->CreateFixture(&fixture);
+	fixture.shape = &shape;
+	main_board->CreateFixture(&fixture);
 
 	return true;
 }
