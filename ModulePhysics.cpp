@@ -3,6 +3,8 @@
 #include "ModuleInput.h"
 #include "ModuleRender.h"
 #include "ModulePhysics.h"
+#include "ModuleSceneIntro.h"
+#include "p2Point.h"
 #include "math.h"
 
 #include "Box2D/Box2D/Box2D.h"
@@ -37,7 +39,7 @@ bool ModulePhysics::Start()
 	body.type = b2_staticBody;
 	body.position.Set(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0));
 
-	b2Body* main_board = world->CreateBody(&body);
+	b2Body* backgroundBlue = world->CreateBody(&body);
 
 	//Board create
 	int Pinball_MainBoard_1_coords[80] = {
@@ -95,7 +97,7 @@ bool ModulePhysics::Start()
 
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
-	main_board->CreateFixture(&fixture);
+	backgroundBlue->CreateFixture(&fixture);
 
 	return true;
 }
@@ -133,7 +135,7 @@ update_status ModulePhysics::PostUpdate()
 				{
 					b2CircleShape* shape = (b2CircleShape*)f->GetShape();
 					b2Vec2 pos = f->GetBody()->GetPosition();
-					App->renderer->DrawCircle(METERS_TO_PIXELS(pos.x), METERS_TO_PIXELS(pos.y), METERS_TO_PIXELS(shape->m_radius), 255, 255, 255);
+					App->renderer->DrawCircle(METERS_TO_PIXELS(pos.x)*SCREEN_SIZE, METERS_TO_PIXELS(pos.y)* SCREEN_SIZE, METERS_TO_PIXELS(shape->m_radius)* SCREEN_SIZE, 255, 255, 255);
 				}
 				break;
 
@@ -205,4 +207,223 @@ bool ModulePhysics::CleanUp()
 	delete world;
 
 	return true;
+}
+
+// Create Paddle Left
+PhysBody* ModulePhysics::CreatePaddleLeft(int x, int y, float angd, float angu)
+{
+	//Circle
+	b2BodyDef body;
+	body.type = b2_staticBody;
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	b2Body* b = world->CreateBody(&body);
+
+	b2CircleShape shape;
+	shape.m_radius = PIXEL_TO_METERS(0);
+	b2FixtureDef fixture;
+	fixture.shape = &shape;
+	fixture.density = 1.0f;
+
+	b->CreateFixture(&fixture);
+
+	PhysBody* pbody = new PhysBody();
+	pbody->body = b;
+	b->SetUserData(pbody);
+	pbody->width = pbody->height = 0;
+
+	//Polygon
+	b2BodyDef body2;
+	body2.type = b2_dynamicBody;
+	body2.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	b2Body* b2 = world->CreateBody(&body2);
+
+	b2PolygonShape shape2;
+
+	int points[16] =
+	{
+		1, 10,
+		1, 6,
+		3, 3,
+		33, 6,
+		33, 8,
+		12, 11,
+		6, 12,
+		2, 11
+	};
+
+	b2Vec2* p = new b2Vec2[8];
+
+	for (uint i = 0; i < 8; ++i)
+	{
+		p[i].x = PIXEL_TO_METERS(points[i * 2 + 0]);
+		p[i].y = PIXEL_TO_METERS(points[i * 2 + 1]);
+	}
+	shape2.Set(p, 8);
+	delete p;
+
+	b2FixtureDef fixture2;
+	fixture2.shape = &shape2;
+	fixture2.density = 2.0f;
+
+	b2->CreateFixture(&fixture2);
+
+	PhysBody* pbody2 = new PhysBody();
+	pbody->body = b2;
+	b2->SetUserData(pbody2);
+	pbody->width = pbody->height = 0;
+
+	//REVOLUTION JOINT
+	b2RevoluteJointDef revoluteJointDef;
+	revoluteJointDef.bodyA = b;
+	revoluteJointDef.bodyB = b2;
+	revoluteJointDef.localAnchorA.Set(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0));
+	revoluteJointDef.localAnchorB.Set(PIXEL_TO_METERS(4), PIXEL_TO_METERS(6));
+	revoluteJointDef.referenceAngle = 0;
+	revoluteJointDef.collideConnected = false;
+	revoluteJointDef.enableMotor = false;
+	revoluteJointDef.maxMotorTorque = 500;
+	revoluteJointDef.motorSpeed = -1000 * DEGTORAD;
+	revoluteJointDef.enableLimit = true;
+	revoluteJointDef.lowerAngle = angu;
+	revoluteJointDef.upperAngle = angd;
+
+	paddleLeftList.add((b2RevoluteJoint*)world->CreateJoint(&revoluteJointDef));
+	return pbody;
+}
+//MOVE PADDLE LEFT
+void ModulePhysics::PaddleMoveLeft()
+{
+	p2List_item<b2RevoluteJoint*>* temp = paddleLeftList.getFirst();
+	while (temp != nullptr)
+	{
+		temp->data->EnableMotor(true);
+		temp = temp->next;
+	}
+}
+//STOP PADDLE LEFT
+void ModulePhysics::PaddleStopLeft()
+{
+	p2List_item<b2RevoluteJoint*>* temp = paddleLeftList.getFirst();
+	while (temp != nullptr)
+	{
+		temp->data->EnableMotor(false);
+		temp = temp->next;
+	}
+}
+
+//Create Paddle Right
+PhysBody* ModulePhysics::CreatePaddleRight(int x, int y, float angd, float angu)
+{
+	//Circle
+	b2BodyDef body;
+	body.type = b2_staticBody;
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	b2Body* b = world->CreateBody(&body);
+
+	b2CircleShape shape;
+	shape.m_radius = PIXEL_TO_METERS(0);
+	b2FixtureDef fixture;
+	fixture.shape = &shape;
+	fixture.density = 1.0f;
+
+	b->CreateFixture(&fixture);
+
+	PhysBody* pbody = new PhysBody();
+	pbody->body = b;
+	b->SetUserData(pbody);
+	pbody->width = pbody->height = 50;
+
+	//Polygon
+	b2BodyDef body2;
+	body2.type = b2_dynamicBody;
+	body2.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	b2Body* b2 = world->CreateBody(&body2);
+
+	b2PolygonShape shape2;
+
+	int points[14] =
+	{
+		-3, 2,
+		27, 3,
+		29, 4,
+		29, 8,
+		27, 12,
+		21, 12,
+		-3, 3
+	};
+
+	b2Vec2* p = new b2Vec2[7];
+
+	for (uint i = 0; i < 7; ++i)
+	{
+		p[i].x = PIXEL_TO_METERS(points[i * 2 + 0]);
+		p[i].y = PIXEL_TO_METERS(points[i * 2 + 1]);
+	}
+	shape2.Set(p, 7);
+	delete p;
+
+	b2FixtureDef fixture2;
+	fixture2.shape = &shape2;
+	fixture2.density = 2.0f;
+
+	b2->CreateFixture(&fixture2);
+
+	PhysBody* pbody2 = new PhysBody();
+	pbody->body = b2;
+	b2->SetUserData(pbody2);
+	pbody->width = pbody->height = 0;
+
+	//REVOLUTION JOINT
+	b2RevoluteJointDef revoluteJointDef;
+	revoluteJointDef.bodyA = b;
+	revoluteJointDef.bodyB = b2;
+	revoluteJointDef.localAnchorA.Set(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0));
+	revoluteJointDef.localAnchorB.Set(PIXEL_TO_METERS(25), PIXEL_TO_METERS(6));
+	revoluteJointDef.referenceAngle = -120 * DEGTORAD;
+	revoluteJointDef.collideConnected = false;
+	revoluteJointDef.enableMotor = false;
+	revoluteJointDef.maxMotorTorque = 500;
+	revoluteJointDef.motorSpeed = 1000 * DEGTORAD;
+	revoluteJointDef.enableLimit = true;
+	revoluteJointDef.lowerAngle = angu;
+	revoluteJointDef.upperAngle = angd;
+	
+	paddleRightList.add((b2RevoluteJoint*)world->CreateJoint(&revoluteJointDef));
+	return pbody;
+}
+//MOVE PADDLE RIGHT
+void ModulePhysics::PaddleMoveRight()
+{
+	p2List_item<b2RevoluteJoint*>* temp = paddleRightList.getFirst();
+	while (temp != nullptr)
+	{
+		temp->data->EnableMotor(true);
+		temp = temp->next;
+	}
+}
+//STOP PADDLE RIGHT
+void ModulePhysics::PaddleStopRight()
+{
+	p2List_item<b2RevoluteJoint*>* temp = paddleRightList.getFirst();
+	while (temp != nullptr)
+	{
+		temp->data->EnableMotor(false);
+		temp = temp->next;
+	}
+}
+
+//PhysBody functions
+void PhysBody::GetPosition(int& x, int& y) const
+{
+	b2Vec2 pos = body->GetPosition();
+	x = METERS_TO_PIXELS(pos.x) - (width);
+	y = METERS_TO_PIXELS(pos.y) - (height);
+}
+float PhysBody::GetRotation() const
+{
+	return RADTODEG * body->GetAngle();
 }

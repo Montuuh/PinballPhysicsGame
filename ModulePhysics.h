@@ -19,11 +19,23 @@
 class b2World;
 class b2Body;
 
-// TODO 6: Create a small class that keeps a pointer to tghe b2Body
-// and has a method to request the position
-// then write the implementation in the .cpp
-// Then make your circle creation function to return a pointer to that class
+// Small class to return to other modules to track position and rotation of physics bodies
+class PhysBody
+{
+public:
+	PhysBody() : listener(NULL), body(NULL)
+	{}
 
+	void GetPosition(int& x, int& y) const;
+	float GetRotation() const;
+	bool Contains(int x, int y) const;
+	int RayCast(int x1, int y1, int x2, int y2, float& normal_x, float& normal_y) const;
+
+public:
+	int width, height;
+	b2Body* body;
+	Module* listener;
+};
 
 class ModulePhysics : public Module
 {
@@ -41,11 +53,23 @@ public:
 	void SpawnRectangle(float width, float height, float density, float restitution, float friction);
 	//void SpawnChain(int points[], const int *arrSize, float density, float restitution, float friction);
 
+	//Functions to create paddles
+	PhysBody* CreatePaddleLeft(int x, int y, float angd, float angu);
+	PhysBody* CreatePaddleRight(int x, int y, float angd, float angu);
+
+	void PaddleMoveLeft();
+	void PaddleStopLeft();
+	void PaddleMoveRight();
+	void PaddleStopRight();
+
 private:
 
 	bool debug;
 	b2World* world;
 	b2Body* ground;
+
+	p2List<b2RevoluteJoint*> paddleLeftList;
+	p2List<b2RevoluteJoint*> paddleRightList;
 };
 
 
