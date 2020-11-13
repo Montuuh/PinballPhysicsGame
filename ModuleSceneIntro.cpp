@@ -61,8 +61,8 @@ bool ModuleSceneIntro::Start()
 	//Paddles coords
 	leftPaddles.add(App->physics->CreatePaddleLeft(108, 429, 40 * DEGTORAD, -30 * DEGTORAD));
 	leftPaddles.add(App->physics->CreatePaddleLeft(109, 201, 40 * DEGTORAD, -30 * DEGTORAD));
-	rightPaddles.add(App->physics->CreatePaddleRight(180, 430, 152 * DEGTORAD, 82 * DEGTORAD));
-	rightPaddles.add(App->physics->CreatePaddleRight(180, 203, 152 * DEGTORAD, 82 * DEGTORAD));
+	rightPaddles.add(App->physics->CreatePaddleRight(180, 430, 150 * DEGTORAD, 80 * DEGTORAD));
+	rightPaddles.add(App->physics->CreatePaddleRight(180, 203, 150 * DEGTORAD, 80 * DEGTORAD));
 
 	return ret;
 }
