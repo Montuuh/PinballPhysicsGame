@@ -61,8 +61,8 @@ bool ModuleSceneIntro::Start()
 	//Paddles coords
 	leftPaddles.add(App->physics->CreatePaddleLeft(108, 429, 40 * DEGTORAD, -30 * DEGTORAD));
 	leftPaddles.add(App->physics->CreatePaddleLeft(109, 201, 40 * DEGTORAD, -30 * DEGTORAD));
-	rightPaddles.add(App->physics->CreatePaddleRight(180, 430, 150 * DEGTORAD, 80 * DEGTORAD));
-	rightPaddles.add(App->physics->CreatePaddleRight(180, 203, 150 * DEGTORAD, 80 * DEGTORAD));
+	rightPaddles.add(App->physics->CreatePaddleRight(180, 430, 152 * DEGTORAD, 82 * DEGTORAD));
+	rightPaddles.add(App->physics->CreatePaddleRight(180, 203, 152 * DEGTORAD, 82 * DEGTORAD));
 
 	return ret;
 }
@@ -153,7 +153,6 @@ update_status ModuleSceneIntro::Update()
 		App->renderer->Blit(sprites, x - 1, y + 3, &PaddleLeftRect, 1.0f, L->data->GetRotation(), 0, 0);
 		L = L->next;
 	}
-
 	L = rightPaddles.getFirst();
 	while (L != NULL)
 	{
@@ -164,7 +163,7 @@ update_status ModuleSceneIntro::Update()
 		PaddleRightRect.y = 99;
 		PaddleRightRect.h = 12;
 		PaddleRightRect.w = 34;
-		App->renderer->Blit(sprites, x - 3, y + 1, &PaddleRightRect, 1.0f, L->data->GetRotation(), 0, 0);
+		App->renderer->Blit(sprites, x - 3, y + 3, &PaddleRightRect, 1.0f, L->data->GetRotation(), 0, 0);
 		L = L->next;
 	}
 
