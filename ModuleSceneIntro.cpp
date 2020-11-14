@@ -58,6 +58,12 @@ bool ModuleSceneIntro::Start()
 	spring5.h = 44;
 	spring5.w = 9;
 
+	//Initial ball
+	circles.add(App->physics->CreateCircle(225, 390, 5.5, b2_dynamicBody, 0));
+	circles.getFirst()->data->body->SetBullet(true);
+	circles.getLast()->data->listener = this;
+
+
 	//Paddles coords
 	leftPaddles.add(App->physics->CreatePaddleLeft(108, 429, 40 * DEGTORAD, -30 * DEGTORAD));
 	leftPaddles.add(App->physics->CreatePaddleLeft(109, 201, 40 * DEGTORAD, -30 * DEGTORAD));
@@ -139,6 +145,22 @@ update_status ModuleSceneIntro::Update()
 	{
 		App->physics->PaddleStopRight();
 	}
+	//Ball rendering
+	p2List_item<PhysBody*>*  c = circles.getFirst();
+
+	while (c != NULL) 
+	{
+		int x, y;
+		c->data->GetPosition(x, y);
+		SDL_Rect ballrect;
+		ballrect.x = 94;
+		ballrect.y = 342;
+		ballrect.h = 12;
+		ballrect.w = 11;
+		App->renderer->Blit(sprites, x, y, &ballrect, 1.0f);
+		c = c->next;
+	}
+
 	//Padle rendering
 	L = leftPaddles.getFirst();
 	while (L != NULL)
@@ -170,7 +192,9 @@ update_status ModuleSceneIntro::Update()
 	// TODO 5: Move all creation of bodies on 1,2,3 key press here in the scene
 	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
-		App->physics->SpawnCircle(30.0f, 1.0f, 0.6f, 0.0f);
+		/*App->physics->SpawnCircle(30.0f, 1.0f, 0.6f, 0.0f);*/
+		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 5.5, b2_dynamicBody, 0));
+		circles.getLast()->data->listener = this;
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)

@@ -53,6 +53,8 @@ public:
 	void SpawnRectangle(float width, float height, float density, float restitution, float friction);
 	//void SpawnChain(int points[], const int *arrSize, float density, float restitution, float friction);
 
+	//Functions to create ball
+	PhysBody* CreateCircle(int x, int y, float radius, b2BodyType type, float rest);
 	//Functions to create paddles
 	PhysBody* CreatePaddleLeft(int x, int y, float angd, float angu);
 	PhysBody* CreatePaddleRight(int x, int y, float angd, float angu);

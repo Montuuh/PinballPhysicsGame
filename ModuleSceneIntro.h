@@ -33,6 +33,8 @@ public:
 	SDL_Rect spring4;
 	SDL_Rect spring5;
 
+	p2List<PhysBody*> circles;
+
 	p2List<PhysBody*> rightPaddles;
 	p2List<PhysBody*> leftPaddles;
 
