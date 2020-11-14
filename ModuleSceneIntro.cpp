@@ -123,6 +123,18 @@ update_status ModuleSceneIntro::Update()
 			App->renderer->Blit(sprites, 220, 401, &spring5);
 		}
 	}
+	
+	/*static float push = 0.0f;
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
+	{
+		push += 40.0f;
+		bouncer->body->ApplyForceToCenter(b2Vec2(0, (push)), true);
+	}
+	else
+		push = 0.0f;*/
+
+	/*b2Vec2 pos = bouncer->body->GetPosition();*/
+
 	if (springAnimation==false)
 	{
 		App->renderer->Blit(sprites, 220, 401, &spring1);

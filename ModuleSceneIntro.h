@@ -20,9 +20,12 @@ public:
 	SDL_Texture* circle;
 	SDL_Texture* box;
 	SDL_Texture* rick;
+	/*PhysBody* bouncer;*/
 
 	SDL_Texture* backgroundBlue;
 	SDL_Texture* sprites;
+
+	
 	
 	int realTime = 0;
 	int currentTime = 0;
@@ -32,6 +35,9 @@ public:
 	SDL_Rect spring3;
 	SDL_Rect spring4;
 	SDL_Rect spring5;
+
+	
+
 
 	p2List<PhysBody*> circles;
 
