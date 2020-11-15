@@ -30,6 +30,18 @@ bool ModuleSceneIntro::Start()
 	App->renderer->camera.x = 0;
 	App->renderer->camera.y = 0;
 
+	App->audio->PlayMusic("Assets/audio/music/Mii_Channel_Music.wav");
+
+	paddle_fx = App->audio->LoadFx("Assets/audio/fx/Paddle.wav");
+	Bouncing_Balls_fx = App->audio->LoadFx("Assets/audio/fx/Bouncing_Balls.wav");
+	Canon_Enter_fx = App->audio->LoadFx("Assets/audio/fx/Canon_Enter.wav");
+	Card_fx = App->audio->LoadFx("Assets/audio/fx/Card.wav");
+	Chicken_Platform_fx = App->audio->LoadFx("Assets/audio/fx/Chicken_Platform.wav");
+	Coins_Tickets_ToDoor_fx = App->audio->LoadFx("Assets/audio/fx/Coins_Tickets_ToDoor.wav");
+	Save_Spring_fx = App->audio->LoadFx("Assets/audio/fx/Save_Spring.wav");
+	Start_fx = App->audio->LoadFx("Assets/audio/fx/Start.wav");
+	Points_Lateral_fx = App->audio->LoadFx("Assets/audio/fx/Points_Lateral.wav");
+
 	backgroundBlue = App->textures->Load("Assets/backgroundBlue.png");
 	sprites = App->textures->Load("Assets/spriteSheet.png");
 	gameOver = App->textures->Load("Assets/gameOver.png");
@@ -398,6 +410,10 @@ update_status ModuleSceneIntro::Update()
 	{
 		springAnimation = false;
 	}
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP)
+	{
+		App->audio->PlayFx(Start_fx);
+	}
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
 	{
 		int animation_time = 450;
@@ -588,6 +604,7 @@ update_status ModuleSceneIntro::Update()
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN)
 	{
 		App->physics->PaddleMoveLeft();
+		App->audio->PlayFx(paddle_fx);
 	}
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_UP)
 	{
@@ -596,6 +613,7 @@ update_status ModuleSceneIntro::Update()
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN)
 	{
 		App->physics->PaddleMoveRight();
+		App->audio->PlayFx(paddle_fx);
 	}
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_UP)
 	{
@@ -710,7 +728,7 @@ update_status ModuleSceneIntro::Update()
 			App->physics->DeleteTemporaryJoint();
 			sensorcanon1upper->body->SetActive(false);
 			circles.getLast()->data->body->ApplyForceToCenter(b2Vec2(-15.0f, -16.5f), true);
-			//App->audio->PlayFx(Start_fx);
+			App->audio->PlayFx(Start_fx);
 			first_joint_time = true;
 		}
 		if (realTime > canoncurrenttime + 1500) {
@@ -788,14 +806,7 @@ void ModuleSceneIntro::MapReset(bool totalreset) {
 		sensorcardK = false;
 		sensorcardA = false;
 		flippedCards = false;
-		//orangemaploaded = false;
-		//chicken1state = 1;
-		//chicken2state = 1;
-		//chicken3state = 1;
-		//godball1->body->SetActive(false);
-		//godball2->body->SetActive(false);
-		//sensorminispring1->body->SetActive(false);
-		//sensorminispring2->body->SetActive(false);
+		loadOrangeMap = false;
 		sensorcoin1triggered = false;
 		sensorcoin2triggered = false;
 		sensorcoin3triggered = false;
@@ -812,33 +823,9 @@ void ModuleSceneIntro::MapReset(bool totalreset) {
 		sensorcoin6->body->SetActive(true);
 		sensorcoin7->body->SetActive(true);
 		sensorcoin8->body->SetActive(true);
-		//sensorextrapoints1triggered = false;
-		//sensorextrapoints2triggered = false;
-		//sensorextrapoints3triggered = false;
-		//sensorextrapoints4triggered = false;
-		//sensorextrapoints1triggeredpoints = false;
-		//sensorextrapoints2triggeredpoints = false;
-		//sensorextrapoints3triggeredpoints = false;
-		//sensorextrapoints4triggeredpoints = false;
 		backgroundBlue = App->textures->Load("Assets/backgroundBlue.png");
 		game_over = false;
 	}
-	//sensor1triggered = false;
-	//sensor2triggered = false;
-	//sensor3triggered = false;
-	//sensor4triggered = false;
-	//sensor5triggered = false;
-	//sensor6triggered = false;
-	//sensor7triggered = false;
-	//sensor1triggeredpoints = false;
-	//sensor2triggeredpoints = false;
-	//sensor3triggeredpoints = false;
-	//sensor4triggeredpoints = false;
-	//sensor5triggeredpoints = false;
-	//sensor6triggeredpoints = false;
-	//sensor7triggeredpoints = false;
-	//sensorballpassedexittriggered = false;
-	//wall->body->SetActive(true);
 }
 
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
@@ -861,25 +848,25 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 				// On collision with pinkballs
 				if (bodyA == sensorpinkball1 || bodyB == sensorpinkball1) 
 				{
-					//App->audio->PlayFx(Bouncing_Balls_fx);
+					App->audio->PlayFx(Bouncing_Balls_fx);
 					points += 100;
 					sensorpinkball1striggered = true;
 				}
 				if (bodyA == sensorpinkball2 || bodyB == sensorpinkball2) 
 				{
-					//App->audio->PlayFx(Bouncing_Balls_fx);
+					App->audio->PlayFx(Bouncing_Balls_fx);
 					points += 100;
 					sensorpinkball2striggered = true;
 				}
 				if (bodyA == sensorpinkball3 || bodyB == sensorpinkball3)
 				{
-					//App->audio->PlayFx(Bouncing_Balls_fx);
+					App->audio->PlayFx(Bouncing_Balls_fx);
 					points += 100;
 					sensorpinkball3striggered = true;
 				}
 				if (bodyA == sensorpinkball4 || bodyB == sensorpinkball4) 
 				{
-					//App->audio->PlayFx(Bouncing_Balls_fx);
+					App->audio->PlayFx(Bouncing_Balls_fx);
 					points += 100;
 					sensorpinkball4striggered = true;
 				}
@@ -887,60 +874,81 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 				// On collision with cards
 				if (bodyA == card10 || bodyB == card10)
 				{
+					App->audio->PlayFx(Card_fx);
 					points += 500;
 					sensorcard10 = true;
 				}
 				if (bodyA == cardJ || bodyB == cardJ)
 				{
+					App->audio->PlayFx(Card_fx);
 					points += 500;
 					sensorcardJ = true;
 				}
 				if (bodyA == cardQ || bodyB == cardQ)
 				{
+					App->audio->PlayFx(Card_fx);
 					points += 500;
 					sensorcardQ = true;
 				}
 				if (bodyA == cardK || bodyB == cardK)
 				{
+					App->audio->PlayFx(Card_fx);
 					points += 500;
 					sensorcardK = true;
 				}
 				if (bodyA == cardA || bodyB == cardA)
 				{
+					App->audio->PlayFx(Card_fx);
 					points += 500;
 					sensorcardA = true;
 				}
 
 				// On Collision with coins
-				if (bodyA == sensorcoin1 || bodyB == sensorcoin1) {
+				if (bodyA == sensorcoin1 || bodyB == sensorcoin1) 
+				{
+					App->audio->PlayFx(Coins_Tickets_ToDoor_fx);
 					sensorcoin1triggered = true;
 					points += 100;
 				}
-				if (bodyA == sensorcoin2 || bodyB == sensorcoin2) {
+				if (bodyA == sensorcoin2 || bodyB == sensorcoin2) 
+				{
+					App->audio->PlayFx(Coins_Tickets_ToDoor_fx);
 					sensorcoin2triggered = true;
 					points += 100;
 				}
-				if (bodyA == sensorcoin3 || bodyB == sensorcoin3) {
+				if (bodyA == sensorcoin3 || bodyB == sensorcoin3) 
+				{
+					App->audio->PlayFx(Coins_Tickets_ToDoor_fx);
 					sensorcoin3triggered = true;
 					points += 100;
 				}
-				if (bodyA == sensorcoin4 || bodyB == sensorcoin4) {
+				if (bodyA == sensorcoin4 || bodyB == sensorcoin4) 
+				{
+					App->audio->PlayFx(Coins_Tickets_ToDoor_fx);
 					sensorcoin4triggered = true;
 					points += 100;
 				}
-				if (bodyA == sensorcoin5 || bodyB == sensorcoin5) {
+				if (bodyA == sensorcoin5 || bodyB == sensorcoin5) 
+				{
+					App->audio->PlayFx(Coins_Tickets_ToDoor_fx);
 					sensorcoin5triggered = true;
 					points += 100;
 				}
-				if (bodyA == sensorcoin6 || bodyB == sensorcoin6) {
+				if (bodyA == sensorcoin6 || bodyB == sensorcoin6) 
+				{
+					App->audio->PlayFx(Coins_Tickets_ToDoor_fx);
 					sensorcoin6triggered = true;
 					points += 100;
 				}
-				if (bodyA == sensorcoin7 || bodyB == sensorcoin7) {
+				if (bodyA == sensorcoin7 || bodyB == sensorcoin7) 
+				{
+					App->audio->PlayFx(Coins_Tickets_ToDoor_fx);
 					sensorcoin7triggered = true;
 					points += 100;					
 				}
-				if (bodyA == sensorcoin8 || bodyB == sensorcoin8) {
+				if (bodyA == sensorcoin8 || bodyB == sensorcoin8) 
+				{
+					App->audio->PlayFx(Coins_Tickets_ToDoor_fx);
 					sensorcoin8triggered = true;
 					points += 100;
 					;
@@ -949,26 +957,28 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 				// On Collision with 100, 500 && 1000 sensors
 				if (bodyA == sensor100points || bodyB == sensor100points)
 				{
-					//App->audio->PlayFx(Points_Lateral_fx);
+					App->audio->PlayFx(Points_Lateral_fx);
 					points += 100;
 					sensor100pointstriggered = true;
 				}
 				if (bodyA == sensor500points1 || bodyB == sensor500points1 ||
 					bodyA == sensor500points2 || bodyB == sensor500points2)
 				{
-					//App->audio->PlayFx(Points_Lateral_fx);
+					App->audio->PlayFx(Points_Lateral_fx);
 					points += 500;
 				}
 				if (bodyA == sensor1000points || bodyB == sensor1000points)
 				{
-					//App->audio->PlayFx(Points_Lateral_fx);
+					App->audio->PlayFx(Points_Lateral_fx);
 					points += 1000;
 				}
-				if (bodyA == sensorcanon1upper || bodyB == sensorcanon1upper) {
-					//App->audio->PlayFx(Canon_Enter_fx);
+				if (bodyA == sensorcanon1upper || bodyB == sensorcanon1upper) 
+				{
+					App->audio->PlayFx(Canon_Enter_fx);
 					sensorcanon1uppertriggered = true;
 				}
-				if (bodyA == sensorcanon1lower || bodyB == sensorcanon1lower) {
+				if (bodyA == sensorcanon1lower || bodyB == sensorcanon1lower) 
+				{
 					sensorcanon1lowertriggered = true;
 				}
 			}
