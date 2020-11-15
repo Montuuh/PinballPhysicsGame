@@ -31,6 +31,7 @@ bool ModulePhysics::Start()
 	LOG("Creating Physics 2D environment");
 
 	world = new b2World(b2Vec2(GRAVITY_X, -GRAVITY_Y));
+	world->SetContactListener(this);
 
 	b2BodyDef bd;
 	ground = world->CreateBody(&bd);
@@ -106,6 +107,17 @@ bool ModulePhysics::Start()
 update_status ModulePhysics::PreUpdate()
 {
 	world->Step(1.0f / 60.0f, 6, 2);
+
+	for (b2Contact* c = world->GetContactList(); c; c = c->GetNext())
+	{
+		if (c->GetFixtureA()->IsSensor() && c->IsTouching())
+		{
+			PhysBody* pb1 = (PhysBody*)c->GetFixtureA()->GetBody()->GetUserData();
+			PhysBody* pb2 = (PhysBody*)c->GetFixtureA()->GetBody()->GetUserData();
+			if (pb1 && pb2 && pb1->listener)
+				pb1->listener->OnCollision(pb1, pb2);
+		}
+	}
 
 	return UPDATE_CONTINUE;
 }
@@ -560,4 +572,17 @@ b2DistanceJointDef* ModulePhysics::CreateLineJoint(b2Body* bodyA, b2Body* bodyB,
 	world->CreateJoint(&DistanceJoinDef);
 	b2DistanceJointDef* dis_joint = (b2DistanceJointDef*)world->CreateJoint(&DistanceJoinDef);
 	return dis_joint;
+}
+
+
+void ModulePhysics::BeginContact(b2Contact* contact)
+{
+	PhysBody* physA = (PhysBody*)contact->GetFixtureA()->GetBody()->GetUserData();
+	PhysBody* physB = (PhysBody*)contact->GetFixtureB()->GetBody()->GetUserData();
+
+	if (physA && physA->listener != NULL)
+		physA->listener->OnCollision(physA, physB);
+
+	if (physB && physB->listener != NULL)
+		physB->listener->OnCollision(physB, physA);
 }

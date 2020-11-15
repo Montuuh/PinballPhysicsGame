@@ -38,7 +38,7 @@ public:
 	Module* listener;
 };
 
-class ModulePhysics : public Module
+class ModulePhysics : public Module, public b2ContactListener
 {
 public:
 	ModulePhysics(Application* app, bool start_enabled = true);
@@ -61,6 +61,9 @@ public:
 	
 	//Joint between two bodies
 	b2DistanceJointDef* CreateLineJoint(b2Body* bodyA, b2Body* bodyB, p2Point<float> Local_Anchor_A, p2Point<float> Local_Anchor_B, float frequency, float damping);
+
+	// b2ContactListener
+	void BeginContact(b2Contact* contact);
 
 	//Functions to create ball
 	PhysBody* CreateCircle(int x, int y, float radius, b2BodyType type, float restitution);

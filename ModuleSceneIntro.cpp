@@ -32,19 +32,20 @@ bool ModuleSceneIntro::Start()
 
 	backgroundBlue = App->textures->Load("Assets/backgroundBlue.png");
 	sprites = App->textures->Load("Assets/spriteSheet.png");
+	gameOver = App->textures->Load("Assets/gameOver.png");
 
 	smallWall = App->physics->CreateRectangle(214, 305, 9, 24, 0, b2_staticBody, 0);
 
 	//Sensors
-	sensor100points = App->physics->CreateRectangleSensor(114, 80, 12, 4, 172);
-	sensor500points1 = App->physics->CreateRectangleSensor(160, 60, 12, 4, 0);
-	sensor500points2 = App->physics->CreateRectangleSensor(127, 60, 12, 4, 0);
-	sensor1000points = App->physics->CreateRectangleSensor(144, 60, 12, 4, 0);
+	// sensor100points = App->physics->CreateRectangleSensor(114, 80, 12, 4, 172);
+	// sensor500points1 = App->physics->CreateRectangleSensor(160, 60, 12, 4, 0);
+	// sensor500points2 = App->physics->CreateRectangleSensor(127, 60, 12, 4, 0);
+	// sensor1000points = App->physics->CreateRectangleSensor(144, 60, 12, 4, 0);
 
-	sensorreset = App->physics->CreateRectangleSensor(145, SCREEN_HEIGHT + 10, 50, 4, 0);
+	sensorreset = App->physics->CreateRectangleSensor(145, SCREEN_HEIGHT, 50, 4, 0);
 
 	//Spring coords
-	spring1.x = 102;
+	spring1.x = 102; 
 	spring1.y = 129;
 	spring1.h = 44;
 	spring1.w = 9;
@@ -398,17 +399,6 @@ update_status ModuleSceneIntro::Update()
 		Push = 0.0f;
 
 	b2Vec2 pos = springBouncer->body->GetPosition();
-	
-	/*static float push = 0.0f;
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
-	{
-		push += 40.0f;
-		bouncer->body->ApplyForceToCenter(b2Vec2(0, (push)), true);
-	}
-	else
-		push = 0.0f;*/
-
-	/*b2Vec2 pos = bouncer->body->GetPosition();*/
 
 	if (springAnimation==false)
 	{
@@ -522,12 +512,12 @@ update_status ModuleSceneIntro::Update()
 		newball = false;
 	}
 
-	/*if (newball == true)
+	if (newball == true)
 	{
 		circles.add(App->physics->CreateCircle(225, 390, 5.5, b2_dynamicBody, 0.0f));
 		circles.getLast()->data->listener = this;
 		newball = false;
-	}*/
+	}
 	
 
 	return UPDATE_CONTINUE;
@@ -535,7 +525,8 @@ update_status ModuleSceneIntro::Update()
 
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
-	if (bodyA != nullptr && bodyB != nullptr) {
+	if (bodyA != nullptr && bodyB != nullptr) 
+	{
 		if (bodyA->body != nullptr && bodyB->body != nullptr)
 		{
 			if (bodyA->body->GetType() == b2Shape::e_circle || bodyB->body->GetType() == b2Shape::e_circle)
@@ -543,10 +534,10 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 				if (bodyA == sensorreset || bodyB == sensorreset)
 				{
 					newball = true;
-					/*numBalls -= 1;
-					if (numBalls < 0) {
-						numBalls = 0;*/
-					
+					numBalls -= 1;
+					if (numBalls < 0)
+						numBalls = 0;
+
 				}
 			}
 		}

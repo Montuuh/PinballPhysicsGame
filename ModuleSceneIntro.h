@@ -21,10 +21,10 @@ public:
 	SDL_Texture* circle;
 	SDL_Texture* box;
 	SDL_Texture* rick;
-	/*PhysBody* bouncer;*/
 
 	SDL_Texture* backgroundBlue;
 	SDL_Texture* sprites;
+	SDL_Texture* gameOver;
 
 	p2List<PhysBody*> boardItems;
 
@@ -36,8 +36,6 @@ public:
 	bool sensor100pointstriggered = false;
 
 	PhysBody* smallWall;
-	PhysBody* springBouncer;
-	PhysBody* bouncerJoint;
 	
 	int realTime = 0;
 	int currentTime = 0;
@@ -47,6 +45,8 @@ public:
 	SDL_Rect spring3;
 	SDL_Rect spring4;
 	SDL_Rect spring5;
+	PhysBody* springBouncer;
+	PhysBody* bouncerJoint;
 
 	bool newball = false;
 	bool reset = false;
