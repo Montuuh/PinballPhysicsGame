@@ -30,7 +30,7 @@ bool ModuleSceneIntro::Start()
 	App->renderer->camera.x = 0;
 	App->renderer->camera.y = 0;
 
-	App->audio->PlayMusic("Assets/audio/music/Mii_Channel_Music.wav");
+	App->audio->PlayMusic("Assets/audio/music/wiiMusic.ogg");
 
 	paddle_fx = App->audio->LoadFx("Assets/audio/fx/Paddle.wav");
 	Bouncing_Balls_fx = App->audio->LoadFx("Assets/audio/fx/Bouncing_Balls.wav");

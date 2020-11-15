@@ -121,16 +121,16 @@ public:
 	uint maxPoints = 0;
 	int numBalls = 3;
 
-	uint music;
-	uint paddle_fx;
-	uint Bouncing_Balls_fx;
-	uint Canon_Enter_fx;
-	uint Card_fx;
-	uint Chicken_Platform_fx;
-	uint Coins_Tickets_ToDoor_fx;
-	uint Save_Spring_fx;
-	uint Start_fx;
-	uint Points_Lateral_fx;
+	int music;
+	int paddle_fx;
+	int Bouncing_Balls_fx;
+	int Canon_Enter_fx;
+	int Card_fx;
+	int Chicken_Platform_fx;
+	int Coins_Tickets_ToDoor_fx;
+	int Save_Spring_fx;
+	int Start_fx;
+	int Points_Lateral_fx;
 
 
 
