@@ -26,6 +26,10 @@ public:
 	SDL_Texture* sprites;
 
 	p2List<PhysBody*> boardItems;
+
+	PhysBody* smallWall;
+	PhysBody* springBouncer;
+	PhysBody* bouncerJoint;
 	
 	int realTime = 0;
 	int currentTime = 0;

@@ -2,6 +2,7 @@
 #include "Module.h"
 #include "Globals.h"
 #include "Application.h"
+#include "p2Point.h"
 
 #include "Box2D/Box2D/Box2D.h"
 
@@ -53,12 +54,17 @@ public:
 	void SpawnRectangle(float width, float height, float density, float restitution, float friction);
 	//void SpawnChain(int points[], const int *arrSize, float density, float restitution, float friction);
 
-	//Functions to create ball
-	PhysBody* CreateCircle(int x, int y, float radius, b2BodyType type, float rest);
+
 	//Functions to create paddles
 	PhysBody* CreatePaddleLeft(int x, int y, float angd, float angu);
 	PhysBody* CreatePaddleRight(int x, int y, float angd, float angu);
+	
+	//Joint between two bodies
+	b2DistanceJointDef* CreateLineJoint(b2Body* bodyA, b2Body* bodyB, p2Point<float> Local_Anchor_A, p2Point<float> Local_Anchor_B, float frequency, float damping);
 
+	//Functions to create ball
+	PhysBody* CreateCircle(int x, int y, float radius, b2BodyType type, float restitution);
+	PhysBody* CreateRectangle(int x, int y, int width, int height, float angle, b2BodyType type, float restitution);
 	PhysBody* CreateChain(int x, int y, int* points, int size, float restitution);
 
 	void PaddleMoveLeft();

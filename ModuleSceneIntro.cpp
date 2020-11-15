@@ -8,6 +8,7 @@
 #include "ModulePhysics.h"
 #include "ModuleWindow.h"
 
+
 #include "SDL/include/SDL.h"
 
 
@@ -31,6 +32,8 @@ bool ModuleSceneIntro::Start()
 
 	backgroundBlue = App->textures->Load("Assets/backgroundBlue.png");
 	sprites = App->textures->Load("Assets/spriteSheet.png");
+
+	smallWall = App->physics->CreateRectangle(214, 305, 9, 24, 0, b2_staticBody, 0);
 
 	//Spring coords
 	spring1.x = 102;
@@ -70,6 +73,10 @@ bool ModuleSceneIntro::Start()
 	rightPaddles.add(App->physics->CreatePaddleRight(180, 430, 150 * DEGTORAD, 80 * DEGTORAD));
 	rightPaddles.add(App->physics->CreatePaddleRight(180, 203, 150 * DEGTORAD, 80 * DEGTORAD));
 
+	springBouncer = App->physics->CreateRectangle(227, 425, 2, 9, 0, b2_dynamicBody, 0);
+	bouncerJoint = App->physics->CreateRectangle(227, 450, 10, 0, 0, b2_staticBody, 0);
+	App->physics->CreateLineJoint(springBouncer->body, bouncerJoint->body, p2Point<float>(0, 0), p2Point<float>(0, 0), 30.0f, 0.0f);
+
 
 	//MAP COLLIDERS
 	int Green_Upper_Right_Wall_coordinates[20] = 
@@ -89,62 +96,62 @@ bool ModuleSceneIntro::Start()
 
 	int Upper_Left_Map_Collider_coordinates[28] = 
 	{
-	37, 43,
-	51, 57,
-	51, 71,
-	35, 88,
-	35, 101,
-	32, 103,
-	29, 103,
-	24, 94,
-	20, 82,
-	20, 63,
-	23, 56,
-	27, 49,
-	32, 45,
-	37, 43
+		37, 43,
+		51, 57,
+		51, 71,
+		35, 88,
+		35, 101,
+		32, 103,
+		29, 103,
+		24, 94,
+		20, 82,
+		20, 63,
+		23, 56,
+		27, 49,
+		32, 45,
+		37, 43
 	};
 	boardItems.add(App->physics->CreateChain(69, 0, Upper_Left_Map_Collider_coordinates, 26, 0));
 
 	int Upper_Right_Map_Collider_coordinates[74] = 
 	{
-	149, 293,
-	149, 72,
-	146, 62,
-	141, 52,
-	136, 46,
-	125, 41,
-	115, 41,
-	99, 57,
-	99, 71,
-	107, 71,
-	112, 67,
-	117, 65,
-	128, 65,
-	136, 68,
-	141, 75,
-	144, 83,
-	144, 131,
-	141, 139,
-	137, 144,
-	132, 147,
-	132, 160,
-	146, 174,
-	146, 184,
-	142, 188,
-	135, 188,
-	127, 181,
-	116, 192,
-	116, 200,
-	123, 207,
-	123, 245,
-	130, 260,
-	143, 260,
-	146, 265,
-	146, 272,
-	140, 285,
-	140, 293,
-	149, 293
+		149, 293,
+		149, 72,
+		146, 62,
+		141, 52,
+		136, 46,
+		125, 41,
+		115, 41,
+		99, 57,
+		99, 71,
+		107, 71,
+		112, 67,
+		117, 65,
+		128, 65,
+		136, 68,
+		141, 75,
+		144, 83,
+		144, 131,
+		141, 139,
+		137, 144,
+		132, 147,
+		132, 160,
+		146, 174,
+		146, 184,
+		142, 188,
+		135, 188,
+		127, 181,
+		116, 192,
+		116, 200,
+		123, 207,
+		123, 245,
+		130, 260,
+		143, 260,
+		146, 265,
+		146, 272,
+		140, 285,
+		140, 293,
+		149, 293
 	};
 	boardItems.add(App->physics->CreateChain(69, 0, Upper_Right_Map_Collider_coordinates, 72, 0));
 
@@ -198,50 +205,50 @@ bool ModuleSceneIntro::Start()
 	//BOARD ITEM COLLIDERS
 	int Pink_Right_Bouncer_coordinates[16] = 
 	{
-	118, 382,
-	118, 401,
-	115, 405,
-	110, 409,
-	107, 407,
-	116, 383,
-	117, 381,
-	118, 382
+		118, 382,
+		118, 401,
+		115, 405,
+		110, 409,
+		107, 407,
+		116, 383,
+		117, 381,
+		118, 382
 	};
 	boardItems.add(App->physics->CreateChain(69, 0, Pink_Right_Bouncer_coordinates, 14, 1.5));
 
 	int Pink_Left_Bouncer_coordinates[14] = 
 	{
-	34, 381,
-	42, 406,
-	41, 409,
-	36, 406,
-	33, 401,
-	33, 382,
-	34, 381
+		34, 381,
+		42, 406,
+		41, 409,
+		36, 406,
+		33, 401,
+		33, 382,
+		34, 381
 	};
 	boardItems.add(App->physics->CreateChain(69, 0, Pink_Left_Bouncer_coordinates, 12, 1.5));
 
 	int Top_Separator_1_coordinates[14] = 
 	{
-	68, 57,
-	68, 58,
-	68, 65,
-	68, 66,
-	67, 65,
-	67, 58,
-	68, 57
+		68, 57,
+		68, 58,
+		68, 65,
+		68, 66,
+		67, 65,
+		67, 58,
+		68, 57
 	};
 	boardItems.add(App->physics->CreateChain(69, 0, Top_Separator_1_coordinates, 12, 0));
 
 	int Top_Separator_2_coordinates[14] = 
 	{
-	84, 57,
-	85, 58,
-	85, 65,
-	84, 66,
-	83, 65,
-	83, 58,
-	84, 57
+		84, 57,
+		85, 58,
+		85, 65,
+		84, 66,
+		83, 65,
+		83, 58,
+		84, 57
 	};
 	boardItems.add(App->physics->CreateChain(68, 0, Top_Separator_2_coordinates, 12, 0));
 
@@ -370,6 +377,19 @@ update_status ModuleSceneIntro::Update()
 			App->renderer->Blit(sprites, 220, 401, &spring5);
 		}
 	}
+
+	//Spring bouncer
+	static float Push = 0.0f;
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
+	{
+
+		Push += 40.0f;
+		springBouncer->body->ApplyForceToCenter(b2Vec2(0, (Push)), true);
+	}
+	else
+		Push = 0.0f;
+
+	b2Vec2 pos = springBouncer->body->GetPosition();
 	
 	/*static float push = 0.0f;
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)

@@ -210,7 +210,7 @@ bool ModulePhysics::CleanUp()
 }
 
 //Create Ball
-PhysBody* ModulePhysics::CreateCircle(int x, int y, float radius, b2BodyType type, float rest)
+PhysBody* ModulePhysics::CreateCircle(int x, int y, float radius, b2BodyType type, float restitution)
 {
 	b2BodyDef body;
 	body.type = b2_dynamicBody;
@@ -233,6 +233,35 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, float radius, b2BodyType typ
 
 	return pbody;
 }
+
+//Function to create rectangles
+PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height, float angle, b2BodyType type, float restitution)
+{
+	b2BodyDef body;
+	body.type = type;
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+	body.angle = angle;
+
+	b2Body* b = world->CreateBody(&body);
+	b2PolygonShape box;
+	box.SetAsBox(PIXEL_TO_METERS(width) * 0.5f, PIXEL_TO_METERS(height) * 0.5f);
+
+	b2FixtureDef fixture;
+	fixture.shape = &box;
+	fixture.density = 1.0f;
+	fixture.restitution = restitution;
+
+	b->CreateFixture(&fixture);
+
+	PhysBody* pbody = new PhysBody();
+	pbody->body = b;
+	b->SetUserData(pbody);
+	pbody->width = width * 0.5f;
+	pbody->height = height * 0.5f;
+
+	return pbody;
+}
+
 //Function to create chains
 PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size, float rest)
 {
@@ -485,4 +514,22 @@ void PhysBody::GetPosition(int& x, int& y) const
 float PhysBody::GetRotation() const
 {
 	return RADTODEG * body->GetAngle();
+}
+
+b2DistanceJointDef* ModulePhysics::CreateLineJoint(b2Body* bodyA, b2Body* bodyB, p2Point<float> Local_Anchor_A, p2Point<float> Local_Anchor_B, float frequency, float damping)
+{
+	b2DistanceJointDef DistanceJoinDef;
+
+	DistanceJoinDef.bodyA = bodyA;
+	DistanceJoinDef.bodyB = bodyB;
+
+	DistanceJoinDef.localAnchorA.Set(Local_Anchor_A.x, Local_Anchor_A.y);
+	DistanceJoinDef.localAnchorB.Set(Local_Anchor_B.x, Local_Anchor_B.y);
+
+	DistanceJoinDef.dampingRatio = damping;
+	DistanceJoinDef.frequencyHz = frequency;
+
+	world->CreateJoint(&DistanceJoinDef);
+	b2DistanceJointDef* dis_joint = (b2DistanceJointDef*)world->CreateJoint(&DistanceJoinDef);
+	return dis_joint;
 }
