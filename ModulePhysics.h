@@ -49,33 +49,33 @@ public:
 	update_status PostUpdate();
 	bool CleanUp();
 
-	// TODO 4: Move body creation to 3 functions to create circles, rectangles and chains
-	void SpawnCircle(float radius, float density, float restitution, float friction);
-	void SpawnRectangle(float width, float height, float density, float restitution, float friction);
-	//void SpawnChain(int points[], const int *arrSize, float density, float restitution, float friction);
-
+	PhysBody* CreateCircle(int x, int y, float radius, b2BodyType type, float restitution);
+	PhysBody* CreateCircleSensor(int x, int y, int radius, b2BodyType type, int density, float rest);
+	PhysBody* CreateRectangle(int x, int y, int width, int height, float angle, b2BodyType type, float restitution);
+	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, float angle);
+	PhysBody* CreateChain(int x, int y, int* points, int size, float restitution);
 
 	//Functions to create paddles
 	PhysBody* CreatePaddleLeft(int x, int y, float angd, float angu);
 	PhysBody* CreatePaddleRight(int x, int y, float angd, float angu);
-	
+
 	//Joint between two bodies
 	b2DistanceJointDef* CreateLineJoint(b2Body* bodyA, b2Body* bodyB, p2Point<float> Local_Anchor_A, p2Point<float> Local_Anchor_B, float frequency, float damping);
 
+	void SpawnCircle(float radius, float density, float restitution, float friction);
+	void SpawnRectangle(float width, float height, float density, float restitution, float friction);
+	//void SpawnChain(int points[], const int *arrSize, float density, float restitution, float friction);
+
 	// b2ContactListener
 	void BeginContact(b2Contact* contact);
-
-	//Functions to create ball
-	PhysBody* CreateCircle(int x, int y, float radius, b2BodyType type, float restitution);
-	PhysBody* CreateRectangle(int x, int y, int width, int height, float angle, b2BodyType type, float restitution);
-	PhysBody* CreateChain(int x, int y, int* points, int size, float restitution);
-
-	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, float angle);
 
 	void PaddleMoveLeft();
 	void PaddleStopLeft();
 	void PaddleMoveRight();
 	void PaddleStopRight();
+
+	void CreateTemporaryJoint();
+	void DeleteTemporaryJoint();
 
 private:
 
@@ -85,6 +85,8 @@ private:
 
 	p2List<b2RevoluteJoint*> paddleLeftList;
 	p2List<b2RevoluteJoint*> paddleRightList;
+
+	b2RevoluteJoint* temp_rev_joint;
 };
 
 

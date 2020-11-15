@@ -108,7 +108,7 @@ void ModuleScore::Blit(int x, int y, int font_id, const char* text) const
 bool ModuleScore::Start()
 {
 	LOG("Loading space scene");
-	font_score = App->score->Load("pinball/NUMBERS2.png", "0123456789", 1);
+	font_score = App->score->Load("Assets/score.png", "0123456789", 1);
 	return true;
 }
 

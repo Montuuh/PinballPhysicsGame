@@ -225,7 +225,7 @@ bool ModulePhysics::CleanUp()
 PhysBody* ModulePhysics::CreateCircle(int x, int y, float radius, b2BodyType type, float restitution)
 {
 	b2BodyDef body;
-	body.type = b2_dynamicBody;
+	body.type = type;
 	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
 
 	b2Body* b = world->CreateBody(&body);
@@ -235,6 +235,7 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, float radius, b2BodyType typ
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
 	fixture.density = 1.0f;
+	fixture.restitution = restitution;
 
 	b->CreateFixture(&fixture);
 
@@ -274,6 +275,7 @@ PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height, fl
 	return pbody;
 }
 
+// Function to create rectangles sensors
 PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int height, float angle)
 {
 	b2BodyDef body;
@@ -300,6 +302,35 @@ PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int heig
 	pbody->height = height;
 
 	return pbody;
+}
+
+// Function to create circles sensors
+PhysBody* ModulePhysics::CreateCircleSensor(int x, int y, int radius, b2BodyType type, int density, float rest) {
+
+	b2BodyDef body;
+
+	body.type = type;
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	b2Body* b = world->CreateBody(&body);
+
+	b2CircleShape shape;
+	shape.m_radius = PIXEL_TO_METERS(radius);
+	b2FixtureDef fixture;
+	fixture.shape = &shape;
+	fixture.density = density;
+	fixture.restitution = rest;
+	fixture.isSensor = true;
+
+	b->CreateFixture(&fixture);
+
+	PhysBody* pbody = new PhysBody();
+	pbody->body = b;
+	b->SetUserData(pbody);
+	pbody->width = pbody->height = radius;
+
+	return pbody;
+
 }
 
 //Function to create chains
@@ -574,7 +605,6 @@ b2DistanceJointDef* ModulePhysics::CreateLineJoint(b2Body* bodyA, b2Body* bodyB,
 	return dis_joint;
 }
 
-
 void ModulePhysics::BeginContact(b2Contact* contact)
 {
 	PhysBody* physA = (PhysBody*)contact->GetFixtureA()->GetBody()->GetUserData();
@@ -585,4 +615,21 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 
 	if (physB && physB->listener != NULL)
 		physB->listener->OnCollision(physB, physA);
+}
+
+void ModulePhysics::CreateTemporaryJoint()
+{
+	b2RevoluteJointDef temp_joint_def;
+	temp_joint_def.bodyA = App->scene_intro->circles.getLast()->data->body;
+	temp_joint_def.bodyB = App->scene_intro->sensorcanon1upper->body;
+	temp_joint_def.collideConnected = false;
+	temp_joint_def.localAnchorA.Set(0, 0);
+	temp_joint_def.localAnchorB.Set(0, 0);
+	temp_rev_joint = (b2RevoluteJoint*)world->CreateJoint(&temp_joint_def);
+}
+
+void ModulePhysics::DeleteTemporaryJoint()
+{
+	world->DestroyJoint(temp_rev_joint);
+	temp_rev_joint = nullptr;
 }
