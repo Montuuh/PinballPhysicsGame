@@ -67,6 +67,8 @@ public:
 	PhysBody* CreateRectangle(int x, int y, int width, int height, float angle, b2BodyType type, float restitution);
 	PhysBody* CreateChain(int x, int y, int* points, int size, float restitution);
 
+	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, float angle);
+
 	void PaddleMoveLeft();
 	void PaddleStopLeft();
 	void PaddleMoveRight();

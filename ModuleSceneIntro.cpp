@@ -35,6 +35,14 @@ bool ModuleSceneIntro::Start()
 
 	smallWall = App->physics->CreateRectangle(214, 305, 9, 24, 0, b2_staticBody, 0);
 
+	//Sensors
+	sensor100points = App->physics->CreateRectangleSensor(114, 80, 12, 4, 172);
+	sensor500points1 = App->physics->CreateRectangleSensor(160, 60, 12, 4, 0);
+	sensor500points2 = App->physics->CreateRectangleSensor(127, 60, 12, 4, 0);
+	sensor1000points = App->physics->CreateRectangleSensor(144, 60, 12, 4, 0);
+
+	sensorreset = App->physics->CreateRectangleSensor(145, SCREEN_HEIGHT + 10, 50, 4, 0);
+
 	//Spring coords
 	spring1.x = 102;
 	spring1.y = 129;
@@ -493,7 +501,55 @@ update_status ModuleSceneIntro::Update()
 
 	}
 
-	// TODO 7: Draw all the circles using "circle" texture
+	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
+	{
+		points = 0;
+		numBalls = 3;
+		reset = true;
+	}
+
+	circles.getLast();
+	if ((newball == true) || (reset == true))
+	{
+		if ((numBalls > 0) || (reset == true))
+		{
+			b2Vec2 BallInitialPos;
+			BallInitialPos.x = 4.55;
+			BallInitialPos.y = 7.89;
+			circles.getLast()->data->body->SetTransform(BallInitialPos, 0);
+			reset = false;
+		}
+		newball = false;
+	}
+
+	/*if (newball == true)
+	{
+		circles.add(App->physics->CreateCircle(225, 390, 5.5, b2_dynamicBody, 0.0f));
+		circles.getLast()->data->listener = this;
+		newball = false;
+	}*/
+	
 
 	return UPDATE_CONTINUE;
+}
+
+void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
+{
+	if (bodyA != nullptr && bodyB != nullptr) {
+		if (bodyA->body != nullptr && bodyB->body != nullptr)
+		{
+			if (bodyA->body->GetType() == b2Shape::e_circle || bodyB->body->GetType() == b2Shape::e_circle)
+			{
+				if (bodyA == sensorreset || bodyB == sensorreset)
+				{
+					newball = true;
+					/*numBalls -= 1;
+					if (numBalls < 0) {
+						numBalls = 0;*/
+					
+				}
+			}
+		}
+	}
+
 }

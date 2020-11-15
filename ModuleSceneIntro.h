@@ -14,6 +14,7 @@ public:
 	bool Start();
 	update_status Update();
 	bool CleanUp();
+	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
 
 public:
 
@@ -26,6 +27,13 @@ public:
 	SDL_Texture* sprites;
 
 	p2List<PhysBody*> boardItems;
+
+	PhysBody* sensor100points;
+	PhysBody* sensor500points1;
+	PhysBody* sensor500points2;
+	PhysBody* sensor1000points;
+	PhysBody* sensorreset;
+	bool sensor100pointstriggered = false;
 
 	PhysBody* smallWall;
 	PhysBody* springBouncer;
@@ -40,6 +48,9 @@ public:
 	SDL_Rect spring4;
 	SDL_Rect spring5;
 
+	bool newball = false;
+	bool reset = false;
+
 	
 
 
@@ -53,7 +64,7 @@ public:
 
 	uint points = 0;
 	uint maxPoints = 0;
-	int numBalls = 1;
+	int numBalls = 3;
 
 
 
