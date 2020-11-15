@@ -10,7 +10,7 @@ Unzip the realese folder and execute the .exe file.
 
 ## Usage
 
-###Normal keys:
+### Normal keys:
 
 ← ➣ Move left paddles
 
@@ -18,17 +18,17 @@ Unzip the realese folder and execute the .exe file.
 
 Space bar ➣ Throw ball, hold it for more power
 
-###Debug modes keys:
+### Debug modes keys:
 
 F1 ➣ Show colliders, sensors, joints,...
 
 1 ➣ Summon one ball
 
-##Win lose condition
+### Win lose condition
 
 "Win" ➣ Get as many points as you can.
 
-Lose ➣ Having unavailable balls left.
+"Lose" ➣ Having unavailable balls left.
 
 
 ## Credits
