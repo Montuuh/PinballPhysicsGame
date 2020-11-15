@@ -70,6 +70,253 @@ bool ModuleSceneIntro::Start()
 	rightPaddles.add(App->physics->CreatePaddleRight(180, 430, 150 * DEGTORAD, 80 * DEGTORAD));
 	rightPaddles.add(App->physics->CreatePaddleRight(180, 203, 150 * DEGTORAD, 80 * DEGTORAD));
 
+
+	//MAP COLLIDERS
+	int Green_Upper_Right_Wall_coordinates[20] = 
+	{
+		116, 88,
+		121, 84,
+		124, 84,
+		130, 88,
+		130, 124,
+		128, 127,
+		125, 127,
+		123, 124,
+		123, 96,
+		116, 88
+	};
+	boardItems.add(App->physics->CreateChain(69, 0, Green_Upper_Right_Wall_coordinates, 18, 0));
+
+	int Upper_Left_Map_Collider_coordinates[28] = 
+	{
+	37, 43,
+	51, 57,
+	51, 71,
+	35, 88,
+	35, 101,
+	32, 103,
+	29, 103,
+	24, 94,
+	20, 82,
+	20, 63,
+	23, 56,
+	27, 49,
+	32, 45,
+	37, 43
+	};
+	boardItems.add(App->physics->CreateChain(69, 0, Upper_Left_Map_Collider_coordinates, 26, 0));
+
+	int Upper_Right_Map_Collider_coordinates[74] = 
+	{
+	149, 293,
+	149, 72,
+	146, 62,
+	141, 52,
+	136, 46,
+	125, 41,
+	115, 41,
+	99, 57,
+	99, 71,
+	107, 71,
+	112, 67,
+	117, 65,
+	128, 65,
+	136, 68,
+	141, 75,
+	144, 83,
+	144, 131,
+	141, 139,
+	137, 144,
+	132, 147,
+	132, 160,
+	146, 174,
+	146, 184,
+	142, 188,
+	135, 188,
+	127, 181,
+	116, 192,
+	116, 200,
+	123, 207,
+	123, 245,
+	130, 260,
+	143, 260,
+	146, 265,
+	146, 272,
+	140, 285,
+	140, 293,
+	149, 293
+	};
+	boardItems.add(App->physics->CreateChain(69, 0, Upper_Right_Map_Collider_coordinates, 72, 0));
+
+	int Upper_Left_Paddle_Map_Collider_coordinates[20] = 
+	{
+		23, 181,
+		35, 192,
+		35, 200,
+		27, 208,
+		26, 257,
+		24, 260,
+		21, 260,
+		17, 253,
+		17, 187,
+		23, 181
+	};
+	boardItems.add(App->physics->CreateChain(69, 0, Upper_Left_Paddle_Map_Collider_coordinates, 18, 0));
+
+	int Bottom_Left_Paddle_Map_Collider_coordinates[22] = 
+	{
+		19, 381,
+		19, 409,
+		23, 414,
+		30, 419,
+		35, 423,
+		35, 426,
+		29, 421,
+		22, 416,
+		17, 410,
+		17, 381,
+		19, 381
+	};
+	boardItems.add(App->physics->CreateChain(69, 0, Bottom_Left_Paddle_Map_Collider_coordinates, 20, 0));
+
+	int Bottom_Right_Paddle_Map_Collider_coordinates[22] = 
+	{
+		133, 381,
+		133, 409,
+		130, 414,
+		123, 420,
+		115, 426,
+		115, 423,
+		122, 418,
+		128, 413,
+		131, 409,
+		131, 381,
+		133, 381
+	};
+	boardItems.add(App->physics->CreateChain(69, 0, Bottom_Right_Paddle_Map_Collider_coordinates, 20, 0));
+
+	//BOARD ITEM COLLIDERS
+	int Pink_Right_Bouncer_coordinates[16] = 
+	{
+	118, 382,
+	118, 401,
+	115, 405,
+	110, 409,
+	107, 407,
+	116, 383,
+	117, 381,
+	118, 382
+	};
+	boardItems.add(App->physics->CreateChain(69, 0, Pink_Right_Bouncer_coordinates, 14, 1.5));
+
+	int Pink_Left_Bouncer_coordinates[14] = 
+	{
+	34, 381,
+	42, 406,
+	41, 409,
+	36, 406,
+	33, 401,
+	33, 382,
+	34, 381
+	};
+	boardItems.add(App->physics->CreateChain(69, 0, Pink_Left_Bouncer_coordinates, 12, 1.5));
+
+	int Top_Separator_1_coordinates[14] = 
+	{
+	68, 57,
+	68, 58,
+	68, 65,
+	68, 66,
+	67, 65,
+	67, 58,
+	68, 57
+	};
+	boardItems.add(App->physics->CreateChain(69, 0, Top_Separator_1_coordinates, 12, 0));
+
+	int Top_Separator_2_coordinates[14] = 
+	{
+	84, 57,
+	85, 58,
+	85, 65,
+	84, 66,
+	83, 65,
+	83, 58,
+	84, 57
+	};
+	boardItems.add(App->physics->CreateChain(68, 0, Top_Separator_2_coordinates, 12, 0));
+
+	int Middle_Separator_1_coordinates[14] = 
+	{
+		36, 285,
+		37, 286,
+		37, 294,
+		36, 296,
+		35, 294,
+		35, 286,
+		36, 285
+	};
+	boardItems.add(App->physics->CreateChain(69, 0, Middle_Separator_1_coordinates, 12, 0));
+
+	int Middle_Separator_2_coordinates[14] = 
+	{
+		52, 285,
+		53, 286,
+		53, 295,
+		52, 296,
+		51, 295,
+		51, 286,
+		52, 285
+	};
+	boardItems.add(App->physics->CreateChain(68, 0, Middle_Separator_2_coordinates, 12, 0));
+
+	int Middle_Separator_3_coordinates[14] = 
+	{
+		68, 285,
+		69, 286,
+		69, 295,
+		68, 296,
+		67, 295,
+		67, 286,
+		68, 285
+	};
+	boardItems.add(App->physics->CreateChain(69, 0, Middle_Separator_3_coordinates, 12, 0));
+
+	int Middle_Separator_4_coordinates[14] = 
+	{
+		84, 285,
+		85, 286,
+		85, 295,
+		84, 296,
+		83, 295,
+		83, 286,
+		84, 285
+	};
+	boardItems.add(App->physics->CreateChain(69, 0, Middle_Separator_4_coordinates, 12, 0));
+
+	int Middle_Separator_5_coordinates[14] = 
+	{
+		100, 285,
+		101, 286,
+		101, 295,
+		100, 296,
+		99, 295,
+		99, 286,
+		100, 285
+	};
+	boardItems.add(App->physics->CreateChain(68, 0, Middle_Separator_5_coordinates, 12, 0));
+
+	int Middle_Separator_6_coordinates[14] = 
+	{
+		116, 285,
+		117, 286,
+		117, 295,
+		116, 296,
+		115, 295,
+		115, 286,
+		116, 285
+	};
+	boardItems.add(App->physics->CreateChain(69, 0, Middle_Separator_6_coordinates, 12, 0));
+
 	return ret;
 }
 

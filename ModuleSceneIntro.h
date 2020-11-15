@@ -25,7 +25,7 @@ public:
 	SDL_Texture* backgroundBlue;
 	SDL_Texture* sprites;
 
-	
+	p2List<PhysBody*> boardItems;
 	
 	int realTime = 0;
 	int currentTime = 0;

@@ -59,6 +59,8 @@ public:
 	PhysBody* CreatePaddleLeft(int x, int y, float angd, float angu);
 	PhysBody* CreatePaddleRight(int x, int y, float angd, float angu);
 
+	PhysBody* CreateChain(int x, int y, int* points, int size, float restitution);
+
 	void PaddleMoveLeft();
 	void PaddleStopLeft();
 	void PaddleMoveRight();
